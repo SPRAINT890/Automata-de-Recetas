@@ -1,0 +1,5 @@
+del Lexer.java, parser.java, sym.java, *.class -ErrorAction SilentlyContinue
+jflex sandwich.flex
+java -jar java-cup-11b.jar sandwich.cup
+javac -cp java-cup-11b.jar *.java
+java -cp ".;java-cup-11b.jar" Main recetas.txt

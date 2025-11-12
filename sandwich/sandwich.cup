@@ -1,0 +1,65 @@
+import java_cup.runtime.*;
+import java.lang.Math;
+import java.util.*;
+import java.io.*;
+
+parser code {:
+    //para calcular cantidades
+    HashMap<String, Integer> table = new HashMap<>();   
+    //
+    public void report_error(String message, Object info) {
+   
+        StringBuffer m = new StringBuffer("Error");
+   
+        if (info instanceof java_cup.runtime.Symbol) {
+             java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));   
+                if (s.right >= 0)                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+   
+        m.append(" : "+message);
+   
+        System.err.println(m);
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+   
+
+   
+/* ------------Declaration of Terminals and Non Terminals Section----------- */
+   
+terminal  Integer QUANTITY;
+terminal  String PAN;
+terminal  SEMI, ING;
+   
+non terminal Object sandwiches, sandwich;
+
+   sandwiches ::= sandwiches sandwich {:
+
+//        System.out.println(table);
+
+     Integer sum = 0;
+     for (Integer f : table.values()) {
+         sum += f;
+     }
+     System.out.println ("total pedidos: "+sum);
+
+:} | sandwich;   
+
+
+    sandwich ::= QUANTITY:q
+                PAN:p
+                ING
+                SEMI
+                {: table.put(p,q); :}
+
+                ;
+
+

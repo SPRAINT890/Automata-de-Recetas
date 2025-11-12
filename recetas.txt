@@ -1,0 +1,14 @@
+RECETA "Prueba"
+INGREDIENTES
+Pan 2 u
+PASOS
+1. Cortar
+Tiempo: 10 min
+Porciones: 1
+Calorías: 200
+Categorías:  [test]
+Origen: test
+Dificultad: fácil
+Tipo: prueba
+Recetas relacionadas: "ninguna"
+obs: "ninguna"

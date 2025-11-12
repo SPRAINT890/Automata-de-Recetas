@@ -1,0 +1,2 @@
+1 pan_integral tomate;
+2 pan_blanco lechuga;
