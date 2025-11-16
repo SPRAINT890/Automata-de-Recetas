@@ -59,7 +59,7 @@ parser code {:
           System.out.println("│   " + (j+1) + ". " + r.pasos.get(j));
         }
         
-        System.out.println("│ INFORMACIÓN:");
+        System.out.println("│ INFORMACION:");
         System.out.println("│   Tiempo: " + r.tiempo);
         System.out.println("│   Porciones: " + r.porciones);
         System.out.println("│   Calorías: " + r.calorias);
