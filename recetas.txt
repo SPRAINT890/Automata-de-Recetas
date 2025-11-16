@@ -1,5 +1,20 @@
+RECETA "Prueba"
+INGREDIENTES:
+Pan 2 u
+PASOS:
+1. Cortar.
+Tiempo: 10 min
+Porciones: 1
+Calorias: 200 Kcal
+Categorias: [principal]
+Origen: test
+Dificultad: FACIL
+Tipo: prueba
+Recetas relacionadas: "ninguna"
+Obs: "ninguna"
+
 RECETA "Brownies de Chocolate"
-INGREDIENTES
+INGREDIENTES:
 harina 200 g
 azúcar 0,5 kg
 manteca 5 cucharas
@@ -11,35 +26,66 @@ PASOS:
 1. Derretir manteca y chocolate.
 2. Agregar azúcar y huevos.
 3. Incorporar harina.
-4. Hornear 30 min a 180C.
+4. Hornear 30 min.
 Tiempo: 45 min
 Porciones: 8
-Calorías: 150 Kcal
-Categorías: [Merienda, Postre]
+Calorias: 150 Kcal
+Categorias: [Merienda, Postre]
 Origen: Italia
 Dificultad: MEDIA
 Tipo: VEGETARIANO
 Recetas relacionadas: "Torta blanda chocolate", "Torta micro chocolate"
 Obs: "Ideal para acompañar con helado. Se puede agregar nueces."
+Grasas=Alto
+Habilitado=Diabético
 
 RECETA "Guiso"
-INGREDIENTES
+INGREDIENTES:
 chorizo 500 g
 lentejas 0,5 kg
-salsa tomate 0,3 l
+salsa de tomate 0,3 l
+manteca derretida 5 cucharas
+chocolate amargo picado 100 g
+harina integral fina 200 g
+leche de coco 1/2 taza
+caldo de verduras 500 ml
+aceite de oliva a gusto
 cebolla 0.5 kg
 morrón 2 u
 sal a gusto
 pimienta a gusto
 PASOS:
-1. Calentar
-2. hervir
+1. Calentar aceite en olla.
+2. Dorar chorizo y cebolla.
+3. Agregar lentejas y agua.
+4. Cocinar hasta que estén tiernas.
 Tiempo: 1h 15 min
 Porciones: 20
-Calorías: 150 Kcal
-Categorías: [Principal]
+Calorias: 150 Kcal
+Categorias: [Principal]
 Origen: Uruguay
 Dificultad: ***
 Tipo: Proteico
 Recetas relacionadas: "Torta blanda chocolate", "Torta micro chocolate"
-Obs: "Ideal para acompañar con helado. Se puede agregar nueces."
+Obs: "Ideal para acompañar con pan."
+Costo=$$$
+
+RECETA "Tortilla Española"
+INGREDIENTES:
+papas 1 kg
+huevo 6 u
+cebolla 0,5 kg
+aceite 0,2 l
+sal a gusto
+PASOS:
+1. Pelar y cortar papas.
+2. Freír papas con cebolla.
+3. Batir huevos y mezclar.
+4. Cocinar en sartén.
+Tiempo: 45 min
+Porciones: 6
+Calorias: 300 Kcal
+Categorias: [Principal, Entrada]
+Origen: España
+Dificultad: FACIL
+Tipo: VEGETARIANO
