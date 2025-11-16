@@ -52,7 +52,7 @@ TiempoFraccion = {Fraccion}[ ]?"h"
 TiempoMixto = {Entero}[ ]{Entero}"'"
 
 /* Dificultad */
-Estrellas = "*"+
+Estrellas = "*"{1,6}
 Precio = "$"+
 
 %%
