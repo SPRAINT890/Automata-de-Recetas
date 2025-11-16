@@ -12,8 +12,11 @@ public class Main {
 
     try {
       p.parse();
-      System.out.println("\n===== RESULTADO =====");
-      System.out.println(p.result);
+      if (p.recetario != null) {
+        p.recetario.imprimir();
+      } else {
+        System.out.println("No se pudo procesar el recetario.");
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
