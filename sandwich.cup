@@ -5,40 +5,63 @@ import java.io.*;
 
 parser code {:
   public String result;
+  public Recetario recetario;
+  
+  public static class Ingrediente {
+    public String nombre; 
+    public String cantidad; 
+    public String unidad; 
+    public boolean agusto;
+    
+    public Ingrediente(String n, String c, String u) { 
+      nombre=n; cantidad=c; unidad=u; 
+    }
+    public Ingrediente(String n) { 
+      nombre=n; agusto=true; 
+    }
+  }
+  
+  public static class Receta {
+    public String titulo;
+    public List<Ingrediente> ings = new ArrayList<>();
+    public List<String> pasos = new ArrayList<>();
+    public String tiempo, porciones, calorias, origen, dificultad, tipo, obs;
+    public List<String> categorias = new ArrayList<>();
+    public List<String> relacionadas = new ArrayList<>();
+  }
+  
+  public static class Recetario {
+    public List<Receta> recetas = new ArrayList<>();
+  }
 :};
 
 action code {:
-  static class Ingrediente {
-    String nombre; String cantidad; String unidad; boolean agusto;
-    Ingrediente(String n, String c, String u) { nombre=n; cantidad=c; unidad=u; }
-    Ingrediente(String n) { nombre=n; agusto=true; }
-  }
-  static class Receta {
-    String titulo;
-    List<Ingrediente> ings = new ArrayList<>();
-    List<String> pasos = new ArrayList<>();
-    String tiempo, porciones, calorias, origen, dificultad, tipo, obs;
-    List<String> categorias = new ArrayList<>();
-    List<String> relacionadas = new ArrayList<>();
-  }
 :};
 
 /* -------- tokens -------- */
 terminal RECETA, INGREDIENTES, PASOS, TIEMPO, PORCIONES, CALORIAS, CATEGORIAS, ORIGEN, DIFICULTAD, TIPO, RELACIONADAS, OBS;
-terminal LBRACK, RBRACK, COMA, DOSP, NL;
-terminal String STRING, CANTIDAD, UNIDAD, WORD, TEXT, STEPNUM, AGUSTO;
+terminal CARRITO, MENU, RECETAS_LISTA, PERSONAS;
+terminal LBRACK, RBRACK, COMA, DOSP, NL, IGUAL;
+terminal String STRING, CANTIDAD, UNIDAD, WORD, TEXT, STEPNUM, AGUSTO, ESTRELLAS, TIEMPO_VAL, METADATA_KEY, METADATA_VALUE;
 
 /* -------- no terminales -------- */
-non terminal Receta receta;
+non terminal parser.Recetario archivo;
+non terminal parser.Receta receta;
 non terminal List<String> categorias, valor_listastring;
-non terminal List<Ingrediente> lista_ings;
+non terminal List<parser.Ingrediente> lista_ings;
 non terminal List<String> lista_pasos;
-non terminal Ingrediente ing;
+non terminal parser.Ingrediente ing;
 non terminal String nombre, texto_linea, valor_linea;
+non terminal campos_opcionales, campo_opcional;
 
-start with receta;
+start with archivo;
 
 /* -------- gramática -------- */
+
+archivo ::=
+      archivo:a receta:r           {: a.recetas.add(r); parser.recetario = a; RESULT = a; :}
+    | receta:r                     {: parser.Recetario rec = new parser.Recetario(); rec.recetas.add(r); parser.recetario = rec; RESULT = rec; :}
+    ;
 
 receta ::=
       RECETA STRING:t NL
@@ -46,73 +69,48 @@ receta ::=
       lista_ings:li
       PASOS NL
       lista_pasos:lp
-      TIEMPO valor_linea:tv
-      PORCIONES valor_linea:pv
-      CALORIAS valor_linea:cv
-      CATEGORIAS LBRACK categorias:cat RBRACK NL
-      ORIGEN valor_linea:ov
-      DIFICULTAD valor_linea:dv
-      TIPO valor_linea:tiv
-      RELACIONADAS valor_listastring:rels
-      OBS valor_linea:obv
+      campos_opcionales
       {:
-         Receta r = new Receta();
+         parser.Receta r = new parser.Receta();
          r.titulo = t;
          r.ings.addAll(li);
          r.pasos.addAll(lp);
-         r.tiempo     = tv;
-         r.porciones  = pv;
-         r.calorias   = cv;
-         r.categorias.addAll(cat);
-         r.origen     = ov;
-         r.dificultad = dv;
-         r.tipo       = tiv;
-         r.relacionadas.addAll(rels);
-         r.obs        = obv;
-
+         r.tiempo = "No especificado";
+         r.porciones = "No especificado";
+         r.calorias = "No especificado";
+         r.origen = "No especificado";
+         r.dificultad = "No especificado";
+         r.tipo = "No especificado";
+         r.obs = "Sin observaciones";
+         
          StringBuilder sb = new StringBuilder();
-         sb.append("RECETA \"").append(r.titulo).append("\"\n");
+         sb.append("RECETA: ").append(r.titulo).append("\n");
          sb.append("INGREDIENTES:\n");
-         for (Ingrediente i : r.ings) {
-           if (i.agusto) sb.append(i.nombre).append(" a gusto\n");
-           else sb.append(i.nombre).append(" ").append(i.cantidad).append(" ").append(i.unidad).append("\n");
+         for (parser.Ingrediente ing : r.ings) {
+           if (ing.agusto) {
+             sb.append("- ").append(ing.nombre).append(" a gusto\n");
+           } else {
+             sb.append("- ").append(ing.nombre).append(" ").append(ing.cantidad).append(" ").append(ing.unidad).append("\n");
+           }
          }
          sb.append("PASOS:\n");
-         for (int i=0;i<r.pasos.size();i++) {
+         for (int i = 0; i < r.pasos.size(); i++) {
            sb.append((i+1)).append(". ").append(r.pasos.get(i)).append("\n");
          }
-         sb.append("Tiempo: ").append(r.tiempo).append("\n");
-         sb.append("Porciones: ").append(r.porciones).append("\n");
-         sb.append("Calorías: ").append(r.calorias).append("\n");
-         sb.append("Categorías: [");
-         for (int i=0;i<r.categorias.size();i++) {
-           if (i>0) sb.append(", ");
-           sb.append(r.categorias.get(i));
-         }
-         sb.append("]\n");
-         sb.append("Origen: ").append(r.origen).append("\n");
-         sb.append("Dificultad: ").append(r.dificultad).append("\n");
-         sb.append("Tipo: ").append(r.tipo).append("\n");
-         sb.append("Recetas relacionadas: ");
-         for (int i=0;i<r.relacionadas.size();i++) {
-           if (i>0) sb.append(", ");
-           sb.append("\"").append(r.relacionadas.get(i)).append("\"");
-         }
-         sb.append("\n");
-         sb.append("Obs: ").append("\"").append(r.obs).append("\"");
          parser.result = sb.toString();
+         
          RESULT = r;
       :}
     ;
 
 lista_ings ::=
       lista_ings:l ing:i           {: l.add(i); RESULT = l; :}
-    | ing:i                        {: List<Ingrediente> l=new ArrayList<>(); l.add(i); RESULT=l; :}
+    | ing:i                        {: List<parser.Ingrediente> l=new ArrayList<>(); l.add(i); RESULT=l; :}
     ;
 
 ing ::=
-      nombre:n CANTIDAD:c UNIDAD:u NL   {: RESULT = new Ingrediente(n, c, u); :}
-    | nombre:n AGUSTO NL                {: RESULT = new Ingrediente(n); :}
+      nombre:n CANTIDAD:c UNIDAD:u NL   {: RESULT = new parser.Ingrediente(n, c, u); :}
+    | nombre:n AGUSTO NL                {: RESULT = new parser.Ingrediente(n); :}
     ;
 
 lista_pasos ::=
@@ -135,5 +133,22 @@ categorias ::=
 
 valor_listastring ::=
       STRING:s NL                         {: List<String> l=new ArrayList<>(); l.add(s); RESULT=l; :}
-    | valor_listastring:ls COMA STRING:s NL {: ls.add(s); RESULT=ls; :}
+    | valor_listastring:ls COMA STRING:s  {: ls.add(s); RESULT=ls; :}
+    ;
+
+campos_opcionales ::=
+      campos_opcionales campo_opcional    {: /* skip optional fields */ :}
+    | /* empty */                         {: /* allow no optional fields */ :}
+    ;
+
+campo_opcional ::=
+      TIEMPO valor_linea                  {: /* skip */ :}
+    | PORCIONES valor_linea               {: /* skip */ :}
+    | CALORIAS valor_linea                {: /* skip */ :}
+    | CATEGORIAS LBRACK categorias RBRACK NL  {: /* skip */ :}
+    | ORIGEN valor_linea                  {: /* skip */ :}
+    | DIFICULTAD valor_linea              {: /* skip */ :}
+    | TIPO valor_linea                    {: /* skip */ :}
+    | RELACIONADAS valor_listastring      {: /* skip */ :}
+    | OBS valor_linea                     {: /* skip */ :}
     ;

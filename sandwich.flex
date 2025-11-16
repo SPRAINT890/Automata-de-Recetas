@@ -10,7 +10,7 @@ import java_cup.runtime.Symbol;
 %line
 %column
 
-%state S_VAL
+%state S_VAL, S_METADATA
 
 %{
   private Symbol symbol(int type) { return new Symbol(type, yyline, yycolumn); }
@@ -32,6 +32,13 @@ FRACTION       = {DIGITS}"/"{DIGITS}
 /* letras (incluye acentos y ñ), guión y apóstrofo sencillo para nombres */
 WORD           = [\p{L}][\p{L}'-]*
 TEXTRESTO      = [^\r\n]+
+/* Tiempo flexible: 1h 15min, 1h 15m, 1,25h, 75min, etc. */
+TIEMPO_PATTERN = ({DIGITS}[hH]({WS}*{DIGITS}[mM]([iI][nN])?)?)|({DECIMAL}[hH])|({DIGITS}[mM]([iI][nN])?)|({DIGITS}['\u2019])
+/* Estrellas para dificultad */
+ESTRELLAS      = \*+
+/* Metadata pattern: ETIQUETA=VALOR */
+METADATA_KEY   = [A-Za-z_][\w]*
+METADATA_VALUE = [^\r\n,=]+
 
 %%
 
@@ -42,32 +49,31 @@ TEXTRESTO      = [^\r\n]+
 <YYINITIAL>{
 
   /* --------- palabras clave ---------- */
-  "RECETA" {WS}+                  { debugToken(sym.RECETA, null); return symbol(sym.RECETA); }
-  "INGREDIENTES"                  { debugToken(sym.INGREDIENTES, null); return symbol(sym.INGREDIENTES); }
-  "PASOS"                         { debugToken(sym.PASOS, null); return symbol(sym.PASOS); }
+  "RECETA" {WS}+                  { debugToken(sym.RECETA, null); yybegin(S_VAL); return symbol(sym.RECETA); }
+  "INGREDIENTES" {WS}* ":"?       { debugToken(sym.INGREDIENTES, null); return symbol(sym.INGREDIENTES); }
+  "PASOS" {WS}* ":"?              { debugToken(sym.PASOS, null); return symbol(sym.PASOS); }
 
-  /* Claves con “:”; tras ellas leemos valor libre hasta NL en S_VAL */
+  /* Claves con ":"; tras ellas leemos valor libre hasta NL en S_VAL */
   "Tiempo"        {WS}* ":"       { debugToken(sym.TIEMPO, null); yybegin(S_VAL); return symbol(sym.TIEMPO); }
   "Porciones"     {WS}* ":"       { debugToken(sym.PORCIONES, null); yybegin(S_VAL); return symbol(sym.PORCIONES); }
-  "Calorías"      {WS}* ":"       { debugToken(sym.CALORIAS, null); yybegin(S_VAL); return symbol(sym.CALORIAS); }
-  "Categorías"    {WS}* ":"       { debugToken(sym.CATEGORIAS, null); return symbol(sym.CATEGORIAS); }
+  ("Calorías"|"Calorias"|"calorias"|"calorías")      {WS}* ":"       { debugToken(sym.CALORIAS, null); yybegin(S_VAL); return symbol(sym.CALORIAS); }
+  ("Categorías"|"Categorias"|"categorias"|"categorías")    {WS}* ":"       { debugToken(sym.CATEGORIAS, null); return symbol(sym.CATEGORIAS); }
   "Origen"        {WS}* ":"       { debugToken(sym.ORIGEN, null); yybegin(S_VAL); return symbol(sym.ORIGEN); }
   "Dificultad"    {WS}* ":"       { debugToken(sym.DIFICULTAD, null); yybegin(S_VAL); return symbol(sym.DIFICULTAD); }
   "Tipo"          {WS}* ":"       { debugToken(sym.TIPO, null); yybegin(S_VAL); return symbol(sym.TIPO); }
 
-  /* “Recetas relacionadas” (con o sin ‘:’) */
   "Recetas" {WS}+ "relacionadas" {WS}* ":" { debugToken(sym.RELACIONADAS, null); return symbol(sym.RELACIONADAS); }
-  "Recetas" {WS}+ "relacionadas"            { debugToken(sym.RELACIONADAS, null); return symbol(sym.RELACIONADAS); }
 
-  /* OBS: texto libre → entrar a S_VAL (con o sin ‘:’) */
+  /* OBS: texto libre → entrar a S_VAL (con o sin ':') */
   "Obs" {WS}* ":"                 { debugToken(sym.OBS, null); yybegin(S_VAL); return symbol(sym.OBS); }
-  "Obs"                           { debugToken(sym.OBS, null); yybegin(S_VAL); return symbol(sym.OBS); }
+
+
 
   /* --------- signos ---------- */
   ","                             { return symbol(sym.COMA); }
   "["                             { return symbol(sym.LBRACK); }
   "]"                             { return symbol(sym.RBRACK); }
-  ":"                             { return symbol(sym.DOSP); }
+
 
   /* paso numerado: 1. 2. 3.  → luego texto del paso hasta NL en S_VAL */
   {DIGITS} "."                    { debugToken(sym.STEPNUM, yytext());
@@ -82,11 +88,17 @@ TEXTRESTO      = [^\r\n]+
   {FRACTION}                      { debugToken(sym.CANTIDAD, yytext()); return symbol(sym.CANTIDAD, yytext()); }
   {DECIMAL}                       { debugToken(sym.CANTIDAD, yytext()); return symbol(sym.CANTIDAD, yytext()); }
 
-  /* unidades comunes */
-  ("g"|"kg"|"l"|"taza"|"cucharita"|"cucharas"|"u"|"min"|"h")
+  /* tiempo flexible */
+  {TIEMPO_PATTERN}                { debugToken(sym.TIEMPO_VAL, yytext()); return symbol(sym.TIEMPO_VAL, yytext()); }
+
+  /* estrellas para dificultad */
+  {ESTRELLAS}                     { debugToken(sym.ESTRELLAS, yytext()); return symbol(sym.ESTRELLAS, yytext()); }
+
+  /* unidades comunes - expandidas */
+  ("g"|"kg"|"gr"|"gramos"|"kilogramos"|"l"|"litros"|"ml"|"mililitros"|"cm3"|"taza"|"tazas"|"cucharita"|"cucharitas"|"cucharada"|"cucharadas"|"cucharas"|"u"|"unidad"|"unidades"|"min"|"minutos"|"h"|"hora"|"horas"|"Kcal"|"kcal"|"cal")
                                   { debugToken(sym.UNIDAD, yytext()); return symbol(sym.UNIDAD, yytext()); }
 
-  /* “a gusto” como token especial */
+  /* "a gusto" como token especial */
   "a" {WS} "gusto"                { debugToken(sym.AGUSTO, "a gusto"); return symbol(sym.AGUSTO, "a gusto"); }
 
   /* nombres (para ingredientes, categorías sin corchetes, etc.) */
@@ -99,6 +111,10 @@ TEXTRESTO      = [^\r\n]+
 
 /* ===================== S_VAL ===================== */
 <S_VAL>{
+  /* quoted strings should be recognized as STRING tokens */
+  \"([^\"\\]|\\.)*\"              { debugToken(sym.STRING, yytext());
+                                    return symbol(sym.STRING, yytext().substring(1, yytext().length()-1)); }
+
   {TEXTRESTO}                     { String t = yytext().trim();
                                     debugToken(sym.TEXT, t);
                                     return symbol(sym.TEXT, t); }
@@ -110,8 +126,27 @@ TEXTRESTO      = [^\r\n]+
                                     return symbol(sym.NL); }
 }
 
+/* ===================== S_METADATA ===================== */
+<S_METADATA>{
+  {METADATA_VALUE}                { String val = yytext().trim();
+                                    debugToken(sym.METADATA_VALUE, val);
+                                    return symbol(sym.METADATA_VALUE, val); }
+
+  {WS}                            { /* skip */ }
+
+  {LineTerminator}                { debugToken(sym.NL, null);
+                                    yybegin(YYINITIAL);
+                                    return symbol(sym.NL); }
+}
+
 /* ===== EOF handling ===== */
 <S_VAL><<EOF>> {
+  debugToken(sym.NL, null);
+  yybegin(YYINITIAL);
+  return symbol(sym.NL);
+}
+
+<S_METADATA><<EOF>> {
   debugToken(sym.NL, null);
   yybegin(YYINITIAL);
   return symbol(sym.NL);

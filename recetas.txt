@@ -1,14 +1,45 @@
-RECETA "Prueba"
+RECETA "Brownies de Chocolate"
 INGREDIENTES
-Pan 2 u
-PASOS
-1. Cortar
-Tiempo: 10 min
-Porciones: 1
-Calorías: 200
-Categorías:  [test]
-Origen: test
-Dificultad: fácil
-Tipo: prueba
-Recetas relacionadas: "ninguna"
-obs: "ninguna"
+harina 200 g
+azúcar 0,5 kg
+manteca 5 cucharas
+aceite 0,3 l
+chocolate 1/2 taza
+huevo 3 u
+vainilla 1 cucharita
+PASOS:
+1. Derretir manteca y chocolate.
+2. Agregar azúcar y huevos.
+3. Incorporar harina.
+4. Hornear 30 min a 180C.
+Tiempo: 45 min
+Porciones: 8
+Calorías: 150 Kcal
+Categorías: [Merienda, Postre]
+Origen: Italia
+Dificultad: MEDIA
+Tipo: VEGETARIANO
+Recetas relacionadas: "Torta blanda chocolate", "Torta micro chocolate"
+Obs: "Ideal para acompañar con helado. Se puede agregar nueces."
+
+RECETA "Guiso"
+INGREDIENTES
+chorizo 500 g
+lentejas 0,5 kg
+salsa tomate 0,3 l
+cebolla 0.5 kg
+morrón 2 u
+sal a gusto
+pimienta a gusto
+PASOS:
+1. Calentar
+2. hervir
+Tiempo: 1h 15 min
+Porciones: 20
+Calorías: 150 Kcal
+Categorías: [Principal]
+Origen: Uruguay
+Dificultad: ***
+Tipo: Proteico
+Recetas relacionadas: "Torta blanda chocolate", "Torta micro chocolate"
+Obs: "Ideal para acompañar con helado. Se puede agregar nueces."
