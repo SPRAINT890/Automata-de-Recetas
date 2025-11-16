@@ -35,7 +35,7 @@ parser code {:
     
     public void imprimir() {
       System.out.println("\n╔════════════════════════════════════════════════════════════════╗");
-      System.out.println("║           RECETARIO DIGITAL - ANÁLISIS COMPLETADO             ║");
+      System.out.println("║           RECETARIO DIGITAL - ANALISIS COMPLETADO              ║");
       System.out.println("╚════════════════════════════════════════════════════════════════╝");
       System.out.println("\nTotal de recetas procesadas: " + recetas.size() + "\n");
       
@@ -48,9 +48,9 @@ parser code {:
         System.out.println("│ INGREDIENTES (" + r.ings.size() + "):");
         for (Ingrediente ing : r.ings) {
           if (ing.agusto) {
-            System.out.println("│   • " + ing.nombre + " " + ing.unidad);
+            System.out.println("│   - " + ing.nombre + " " + ing.unidad);
           } else {
-            System.out.println("│   • " + ing.nombre + " " + ing.cantidad + " " + ing.unidad);
+            System.out.println("│   - " + ing.nombre + " " + ing.cantidad + " " + ing.unidad);
           }
         }
         
@@ -140,6 +140,8 @@ non terminal List<String> lista_recetas_rel;
 non terminal String nombre_ingrediente;
 non terminal nls;
 non terminal Object colon_opt;
+non terminal punto_opt;
+
 
 /* ============ GRAMÁTICA ============ */
 start with archivo;
@@ -254,45 +256,37 @@ cantidad ::=
     | FRACCION:f         {: RESULT = f; :}
     ;
 
-/* Lista de pasos con texto flexible */
+/* Lista de pasos: el punto final es opcional */
 lista_pasos ::=
-      lista_pasos:l ENTERO PUNTO paso_texto:t PUNTO nls
-      {: 
-        l.add(t); 
-        RESULT = l; 
+      lista_pasos:l ENTERO PUNTO paso_texto:t punto_opt nls
+      {:
+        l.add(t);
+        RESULT = l;
       :}
-    | ENTERO PUNTO paso_texto:t PUNTO nls
-      {: 
-        List<String> l = new ArrayList<>(); 
-        l.add(t); 
-        RESULT = l; 
+    | ENTERO PUNTO paso_texto:t punto_opt nls
+      {:
+        List<String> l = new ArrayList<>();
+        l.add(t);
+        RESULT = l;
       :}
     ;
 
-/* Texto del paso (una o más palabras/números) */
+/* El punto al final del paso es opcional */
+punto_opt ::=
+      PUNTO
+    | /* vacío */
+    ;
+
+/* Texto del paso (una o más palabras, unidades o tiempos; SIN números sueltos) */
 paso_texto ::=
       paso_texto:t PALABRA:p
-      {: 
-        RESULT = t + " " + p; 
-      :}
-    | paso_texto:t ENTERO:n
-      {: 
-        RESULT = t + " " + n; 
-      :}
+      {: RESULT = t + " " + p; :}
     | paso_texto:t UNIDAD:u
-      {: 
-        RESULT = t + " " + u; 
-      :}
+      {: RESULT = t + " " + u; :}
     | paso_texto:t TIEMPO_VAL:tv
       {: RESULT = t + " " + tv; :}
     | PALABRA:p
-      {: 
-        RESULT = p; 
-      :}
-    | ENTERO:n
-      {: 
-        RESULT = n.toString(); 
-      :}
+      {: RESULT = p; :}
     | TIEMPO_VAL:tv
       {: RESULT = tv; :}
     ;

@@ -6,59 +6,75 @@
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int RBRACK = 15;
+  public static final int TIEMPO_KW = 5;
+  public static final int PUNTO = 17;
   public static final int PASOS = 4;
-  public static final int DIFICULTAD = 10;
-  public static final int ORIGEN = 9;
-  public static final int WORD = 22;
+  public static final int DIFICULTAD = 11;
+  public static final int ORIGEN = 10;
   public static final int CALORIAS = 7;
+  public static final int DECIMAL = 27;
   public static final int INGREDIENTES = 3;
-  public static final int RELACIONADAS = 12;
-  public static final int LBRACK = 14;
-  public static final int DOSP = 17;
+  public static final int PALABRA = 24;
+  public static final int NIVEL_TEXTO = 32;
+  public static final int RECETAS_RELACIONADAS = 14;
+  public static final int FRACCION = 28;
+  public static final int UNIDAD_LIBRE = 21;
+  public static final int LBRACKET = 18;
+  public static final int COLON = 15;
+  public static final int TEXTO_COMILLAS = 25;
   public static final int OBS = 13;
-  public static final int CATEGORIAS = 8;
-  public static final int TIPO = 11;
-  public static final int STRING = 19;
+  public static final int ESTRELLAS = 31;
+  public static final int CATEGORIA = 30;
+  public static final int RBRACKET = 19;
+  public static final int CATEGORIAS = 9;
+  public static final int TIPO = 12;
+  public static final int EQUALS = 20;
   public static final int COMA = 16;
   public static final int EOF = 0;
-  public static final int AGUSTO = 25;
-  public static final int UNIDAD = 21;
-  public static final int TIEMPO = 5;
-  public static final int CANTIDAD = 20;
+  public static final int UNIDAD = 26;
+  public static final int NUEVA_LINEA = 22;
+  public static final int TIEMPO_VAL = 29;
   public static final int error = 1;
-  public static final int STEPNUM = 24;
-  public static final int TEXT = 23;
+  public static final int KCAL = 8;
+  public static final int PRECIO = 33;
+  public static final int ENTERO = 23;
   public static final int PORCIONES = 6;
   public static final int RECETA = 2;
-  public static final int NL = 18;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "RECETA",
   "INGREDIENTES",
   "PASOS",
-  "TIEMPO",
+  "TIEMPO_KW",
   "PORCIONES",
   "CALORIAS",
+  "KCAL",
   "CATEGORIAS",
   "ORIGEN",
   "DIFICULTAD",
   "TIPO",
-  "RELACIONADAS",
   "OBS",
-  "LBRACK",
-  "RBRACK",
+  "RECETAS_RELACIONADAS",
+  "COLON",
   "COMA",
-  "DOSP",
-  "NL",
-  "STRING",
-  "CANTIDAD",
+  "PUNTO",
+  "LBRACKET",
+  "RBRACKET",
+  "EQUALS",
+  "UNIDAD_LIBRE",
+  "NUEVA_LINEA",
+  "ENTERO",
+  "PALABRA",
+  "TEXTO_COMILLAS",
   "UNIDAD",
-  "WORD",
-  "TEXT",
-  "STEPNUM",
-  "AGUSTO"
+  "DECIMAL",
+  "FRACCION",
+  "TIEMPO_VAL",
+  "CATEGORIA",
+  "ESTRELLAS",
+  "NIVEL_TEXTO",
+  "PRECIO"
   };
 }
 

@@ -78,10 +78,10 @@ cebolla 0,5 kg
 aceite 0,2 l
 sal a gusto
 PASOS:
-1. Pelar y cortar papas.
-2. Freír papas con cebolla.
-3. Batir huevos y mezclar.
-4. Cocinar en sartén.
+1. Pelar y cortar papas
+2. Freír papas con cebolla
+3. Batir huevos y mezclar
+4. Cocinar en sartén
 Tiempo: 45 min
 Porciones: 6
 Calorias: 300 Kcal
