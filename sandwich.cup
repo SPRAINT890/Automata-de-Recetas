@@ -139,7 +139,7 @@ non terminal List<String> lista_categorias;
 non terminal List<String> lista_recetas_rel;
 non terminal String nombre_ingrediente;
 non terminal nls;
-
+non terminal Object colon_opt;
 
 /* ============ GRAMÁTICA ============ */
 start with archivo;
@@ -169,13 +169,13 @@ archivo ::=
 /* Estructura de una receta */
 receta ::=
       RECETA TEXTO_COMILLAS:titulo nls
-      INGREDIENTES COLON nls
+      INGREDIENTES colon_opt nls
       lista_ings:ings
-      PASOS COLON nls
+      PASOS colon_opt nls
       lista_pasos:pasos
-      TIEMPO_KW COLON TIEMPO_VAL:tiempo nls
-      PORCIONES COLON ENTERO:porciones nls
-      CALORIAS COLON ENTERO:calorias KCAL nls
+      TIEMPO_KW colon_opt TIEMPO_VAL:tiempo nls
+      PORCIONES colon_opt ENTERO:porciones nls
+      CALORIAS colon_opt ENTERO:calorias KCAL nls
       campos_opcionales:opt
       {:
          parser.Receta r;
@@ -191,6 +191,17 @@ receta ::=
          r.porciones = porciones.toString();
          r.calorias = calorias.toString();
          RESULT = r;
+      :}
+    ;
+
+colon_opt ::=
+      COLON
+      {: 
+          RESULT = null; 
+      :}
+    | /* vacío */
+      {: 
+          RESULT = null; 
       :}
     ;
 
@@ -313,43 +324,43 @@ campos_opcionales ::=
     ;
 
 campo_opcional ::=
-      CATEGORIAS COLON LBRACKET lista_categorias:cats RBRACKET nls
+      CATEGORIAS colon_opt LBRACKET lista_categorias:cats RBRACKET nls
       {: 
         parser.Receta r = new parser.Receta();
         r.categorias.addAll(cats);
         RESULT = r; 
       :}
-    | ORIGEN COLON PALABRA:origen nls
+    | ORIGEN colon_opt PALABRA:origen nls
       {: 
         parser.Receta r = new parser.Receta();
         r.origen = origen;
         RESULT = r; 
       :}
-    | DIFICULTAD COLON NIVEL_TEXTO:dif nls
+    | DIFICULTAD colon_opt NIVEL_TEXTO:dif nls
       {: 
         parser.Receta r = new parser.Receta();
         r.dificultad = dif;
         RESULT = r; 
       :}
-    | DIFICULTAD COLON ESTRELLAS:dif nls
+    | DIFICULTAD colon_opt ESTRELLAS:dif nls
       {: 
         parser.Receta r = new parser.Receta();
         r.dificultad = dif;
         RESULT = r; 
       :}
-    | TIPO COLON PALABRA:tipo nls
+    | TIPO colon_opt PALABRA:tipo nls
       {: 
         parser.Receta r = new parser.Receta();
         r.tipo = tipo;
         RESULT = r; 
       :}
-    | RECETAS_RELACIONADAS COLON lista_recetas_rel:rel nls
+    | RECETAS_RELACIONADAS colon_opt lista_recetas_rel:rel nls
       {: 
         parser.Receta r = new parser.Receta();
         r.relacionadas.addAll(rel);
         RESULT = r; 
       :}
-    | OBS COLON TEXTO_COMILLAS:obs nls
+    | OBS colon_opt TEXTO_COMILLAS:obs nls
       {: 
         parser.Receta r = new parser.Receta();
         r.obs = obs;

@@ -1,17 +1,17 @@
 RECETA "Prueba"
-INGREDIENTES:
+INGREDIENTES
 Pan 2 u
 PASOS:
 1. Cortar.
 Tiempo: 10 min
-Porciones: 1
-Calorias: 200 Kcal
-Categorias: [principal]
-Origen: test
-Dificultad: FACIL
-Tipo: prueba
-Recetas relacionadas: "ninguna"
-Obs: "ninguna"
+Porciones 1
+Calorias 200 Kcal
+Categorias [principal]
+Origen test
+Dificultad ******
+Tipo prueba
+Recetas relacionadas "ninguna"
+Obs "ninguna"
 
 RECETA "Brownies de Chocolate"
 INGREDIENTES:
