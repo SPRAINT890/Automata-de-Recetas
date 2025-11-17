@@ -304,10 +304,10 @@ public class parser extends java_cup.runtime.lr_parser {
           System.out.println("│   " + (j+1) + ". " + r.pasos.get(j));
         }
         
-        System.out.println("│ INFORMACIÓN:");
+        System.out.println("│ INFORMACION:");
         System.out.println("│   Tiempo: " + r.tiempo);
         System.out.println("│   Porciones: " + r.porciones);
-        System.out.println("│   Calorías: " + r.calorias);
+        System.out.println("│   Calorías: " + r.calorias + " kcal");
         
         if (!r.categorias.isEmpty()) {
           System.out.println("│   Categorías: " + String.join(", ", r.categorias));
